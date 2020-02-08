@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/item_right_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/color_line"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_right_wrapper_hint_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Check"
+            android:textColor="@color/color_black"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/item_right_wrapper_cbx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/item_child_waybill_state_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_receiver_pay"
+            android:paddingStart="8dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="3dp"
+            android:text=""
+            android:textColor="@color/color_white"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Receiver Pay" />
+
+        <TextView
+            android:id="@+id/item_child_waybill_no_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text=""
+            android:textColor="@color/color_black"
+            android:textSize="18sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/item_child_waybill_state_tv"
+            app:layout_constraintLeft_toRightOf="@id/item_child_waybill_state_tv"
+            app:layout_constraintRight_toLeftOf="@id/item_child_sign_account_tv"
+            tools:text="SF10116299303818" />
+
+        <TextView
+            android:id="@+id/item_child_sign_account_tv"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/shape_circle_red"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/color_white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/item_child_waybill_state_tv"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toRightOf="@id/item_child_waybill_no_tv"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/item_child_waybill_state_tv"
+            tools:text="2" />
+
+        <TextView
+            android:id="@+id/item_child_amount_receivable_hint_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Receivable: "
+            android:textColor="@color/color_black"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/item_child_amount_receivable_tv"
+            app:layout_constraintTop_toBottomOf="@id/item_child_waybill_state_tv" />
+
+        <TextView
+            android:id="@+id/item_child_amount_receivable_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text=""
+            android:textColor="@color/color_black"
+            android:textSize="18sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/item_child_amount_receivable_hint_tv"
+            app:layout_constraintLeft_toRightOf="@id/item_child_amount_receivable_hint_tv"
+            app:layout_constraintRight_toLeftOf="@id/item_child_fee_type_tv"
+            tools:text="Cash 9.00 SGD" />
+
+        <TextView
+            android:id="@+id/item_child_amount_receipts_hint_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Receipts: "
+            android:textColor="@color/color_black"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/item_child_amount_receipts_tv"
+            app:layout_constraintTop_toBottomOf="@id/item_child_amount_receivable_tv" />
+
+        <TextView
+            android:id="@+id/item_child_amount_receipts_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text=""
+            android:textColor="@color/color_red"
+            android:textSize="18sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/item_child_amount_receipts_hint_tv"
+            app:layout_constraintLeft_toRightOf="@id/item_child_amount_receipts_hint_tv"
+            app:layout_constraintRight_toRightOf="@id/item_child_amount_receivable_tv"
+            tools:text="Cash 9.00 SGD" />
+
+        <View
+            android:id="@+id/line1"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/color_line"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="@id/item_child_deliver_contract_tv"
+            app:layout_constraintTop_toBottomOf="@id/item_child_amount_receipts_hint_tv" />
+
+        <TextView
+            android:id="@+id/item_child_fee_type_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_fee_type"
+            android:paddingStart="8dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="3dp"
+            android:text=""
+            android:textColor="@color/color_black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/item_child_amount_receipts_tv"
+            app:layout_constraintLeft_toRightOf="@id/item_child_amount_receivable_tv"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/item_child_amount_receivable_tv"
+            tools:text="Freight" />
+
+        <TextView
+            android:id="@+id/item_child_sender_contract_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/color_black"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/item_child_deliver_contract_tv"
+            app:layout_constraintTop_toBottomOf="@id/line1"
+            tools:text="寄件人姓名" />
+
+        <TextView
+            android:id="@+id/item_child_deliver_contract_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/color_black"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toRightOf="@id/item_child_sender_contract_tv"
+            app:layout_constraintRight_toLeftOf="@id/item_child_expanded_state_iv"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/line1"
+            tools:text="收件人姓名" />
+
+        <ImageView
+            android:id="@+id/item_child_expanded_state_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/icon_fold"
+            app:layout_constraintBottom_toBottomOf="@id/item_child_deliver_contract_tv"
+            app:layout_constraintLeft_toRightOf="@id/item_child_deliver_contract_tv"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/line1" />
+
+    </android.support.constraint.ConstraintLayout>
+</com.daimajia.swipe.SwipeLayout>
