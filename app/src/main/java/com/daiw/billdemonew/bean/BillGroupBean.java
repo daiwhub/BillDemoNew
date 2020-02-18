@@ -26,7 +26,7 @@ public class BillGroupBean implements Parcelable{
     private String  senderContract;//寄件人姓名
     private String  deliverContract;//收件人姓名
 
-    private List<BillBean> mChildList;
+    private List<BillBean> childList;
 
     public BillGroupBean() {
     }
@@ -49,7 +49,7 @@ public class BillGroupBean implements Parcelable{
         payMethod = in.readString();
         senderContract = in.readString();
         deliverContract = in.readString();
-        mChildList = in.createTypedArrayList(BillBean.CREATOR);
+        childList = in.createTypedArrayList(BillBean.CREATOR);
     }
 
     public static final Creator<BillGroupBean> CREATOR = new Creator<BillGroupBean>() {
@@ -136,12 +136,12 @@ public class BillGroupBean implements Parcelable{
         this.deliverContract = deliverContract;
     }
 
-    public List<BillBean> getmChildList() {
-        return mChildList;
+    public List<BillBean> getChildList() {
+        return childList;
     }
 
-    public void setmChildList(List<BillBean> mChildList) {
-        this.mChildList = mChildList;
+    public void setChildList(List<BillBean> childList) {
+        this.childList = childList;
     }
 
     @Override
@@ -170,6 +170,6 @@ public class BillGroupBean implements Parcelable{
         dest.writeString(payMethod);
         dest.writeString(senderContract);
         dest.writeString(deliverContract);
-        dest.writeTypedList(mChildList);
+        dest.writeTypedList(childList);
     }
 }

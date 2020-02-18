@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.saas.payment">
+
+    <application>
+        <activity android:name=".view.PaymentActivity"></activity>
+        <!-- 选择支付方式 -->
+        <activity android:name=".view.PaymentMethodActivity" /> <!-- 待支付列表 -->
+        <activity android:name=".view.CollectChargesActivity" /> <!-- 选择支付方式 -->
+        <activity android:name=".view.SelectPaymentActivity" />
+    </application>
+
+</manifest>

@@ -14,17 +14,20 @@ import com.daiw.billdemonew.adapter.ScreenOutAdapter;
 import com.daiw.billdemonew.bean.BillBean;
 import com.daiw.billdemonew.bean.BillGroupBean;
 import com.daiw.billdemonew.bean.GridItemBean;
+import com.daiw.billdemonew.utils.CopyBeanUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SelectPopup.OnItemCallback {
+public class BillListActivity extends AppCompatActivity implements SelectPopup.OnItemCallback {
 
     private ExpandableListView mListView;
     private RecyclerView mScreenOutRlv;
     private MyAdapter myAdapter;
     private ScreenOutAdapter mScreenOutAdapter;
+    private List<BillGroupBean> mGroupDefaultList = new ArrayList<>();
     private List<BillGroupBean> mGroupList;
+    private List<List<BillBean>> mChildDefaultList = new ArrayList<>();
     private List<List<BillBean>> mChildList;
 
     private TextView mSlectPaymethodTv;
@@ -45,17 +48,14 @@ public class MainActivity extends AppCompatActivity implements SelectPopup.OnIte
     private int mFeeTypeIndex = 0;
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        dismissPopup();
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         initData();
+
+        mGroupDefaultList = setGroupDefaultList(mGroupList);
+        mChildDefaultList = setChildDefaultList(mChildList);
 
         mSlectPaymethodTv = findViewById(R.id.payment_method_tv);
         mSelectUncheckTv = findViewById(R.id.uncheck_tv);
@@ -75,6 +75,46 @@ public class MainActivity extends AppCompatActivity implements SelectPopup.OnIte
         mScreenOutRlv.setAdapter(mScreenOutAdapter);
 
         setListener();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dismissPopup();
+    }
+
+    private List<BillGroupBean> setGroupDefaultList(List<BillGroupBean> temList) {
+        List<BillGroupBean> billGroupBeans = new ArrayList<>();
+
+        if (temList != null && temList.size() > 0) {
+            for (BillGroupBean groupBean : temList) {
+                if (groupBean != null) {
+                    BillGroupBean billGroupBean = CopyBeanUtil.copyGroupBean(groupBean);
+                    billGroupBeans.add(billGroupBean);
+                }
+            }
+        }
+        return billGroupBeans;
+    }
+
+    private List<List<BillBean>> setChildDefaultList(List<List<BillBean>> temList) {
+        List<List<BillBean>> childList = new ArrayList<>();
+
+        if (temList != null && temList.size() > 0) {
+            for (List<BillBean> list : temList) {
+                List<BillBean> listTem = new ArrayList<>();
+                if (list != null && list.size() > 0) {
+                    for (BillBean bean : list) {
+                        BillBean billBean = CopyBeanUtil.copyChildBean(bean);
+                        listTem.add(billBean);
+                    }
+                }
+                if (listTem.size() > 0) {
+                    childList.add(listTem);
+                }
+            }
+        }
+        return childList;
     }
 
     private void showPopup(View view, List<GridItemBean> itemBeanList, String title) {
@@ -119,8 +159,8 @@ public class MainActivity extends AppCompatActivity implements SelectPopup.OnIte
                         mListView.collapseGroup(i);
                     } else {
                         BillGroupBean billGroupBean = mGroupList.get(i);
-                        if (null != billGroupBean && billGroupBean.getmChildList() != null) {
-                            int size = billGroupBean.getmChildList().size();
+                        if (null != billGroupBean && billGroupBean.getChildList() != null) {
+                            int size = billGroupBean.getChildList().size();
                             if (size == 1) {
                                 mListView.collapseGroup(i);
                             }
@@ -183,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements SelectPopup.OnIte
         billGroupBean.setPayMethod("3");
         billGroupBean.setSenderContract("Sender");
         billGroupBean.setDeliverContract("Deliver");
-        billGroupBean.setmChildList(childList1);
+        billGroupBean.setChildList(childList1);
 
         //第二条
         BillGroupBean billGroupBean2 = new BillGroupBean();
@@ -222,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements SelectPopup.OnIte
         billGroupBean2.setPayMethod("0");
         billGroupBean2.setSenderContract("Sender");
         billGroupBean2.setDeliverContract("Deliver");
-        billGroupBean2.setmChildList(childList2);
+        billGroupBean2.setChildList(childList2);
 
         //第三条
         BillGroupBean billGroupBean3 = new BillGroupBean();
@@ -261,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements SelectPopup.OnIte
         billGroupBean3.setPayMethod("0");
         billGroupBean3.setSenderContract("Sender");
         billGroupBean3.setDeliverContract("Deliver");
-        billGroupBean3.setmChildList(childList3);
+        billGroupBean3.setChildList(childList3);
 
         //第四条
         BillGroupBean billGroupBean4 = new BillGroupBean();
@@ -288,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements SelectPopup.OnIte
         billGroupBean4.setPayMethod("0");
         billGroupBean4.setSenderContract("Sender");
         billGroupBean4.setDeliverContract("Deliver");
-        billGroupBean4.setmChildList(childList4);
+        billGroupBean4.setChildList(childList4);
 
         mGroupList.add(billGroupBean);
         mGroupList.add(billGroupBean2);
@@ -317,11 +357,12 @@ public class MainActivity extends AppCompatActivity implements SelectPopup.OnIte
             } else {
                 mSlectPaymethodTv.setText(mPayMethodList.get(position).getText());
             }
-            if (mPayMethodIndex == 0 && mFeeTypeIndex == 0) {
-                showView(true);
-            } else {
-                setScreenOut();
-            }
+//            if (mPayMethodIndex == 0 && mFeeTypeIndex == 0) {
+//                showView(true);
+//            } else {
+//                setScreenOut();
+//            }
+            setScreenOutNew();
         } else {
             mFeeTypeIndex = position;
             for (int i = 0; i < mFeeTypeList.size(); i++) {
@@ -336,10 +377,232 @@ public class MainActivity extends AppCompatActivity implements SelectPopup.OnIte
             } else {
                 mSelectFeeTypeTv.setText(mFeeTypeList.get(position).getText());
             }
-            if (mPayMethodIndex == 0 && mFeeTypeIndex == 0) {
-                showView(true);
-            } else {
-                setScreenOut();
+            setScreenOutNew();
+//            if (mPayMethodIndex == 0 && mFeeTypeIndex == 0) {
+//                showView(true);
+//            } else {
+//                setScreenOutNew();
+//            }
+        }
+    }
+
+    private void setScreenOutNew() {
+        List<BillGroupBean> groupBeanList = new ArrayList<>();
+        List<List<BillBean>> childBeanList = new ArrayList<>();
+
+        String payMethod = "";
+        if (mPayMethodIndex > 0) {
+            //支付方式
+            payMethod = mPayMethodList.get(mPayMethodIndex).getType();
+        } else {
+            payMethod = "";
+        }
+        String feeType = "";
+        if (mFeeTypeIndex > 0) {
+            //费用类型方式
+            feeType = mFeeTypeList.get(mFeeTypeIndex).getType();
+        } else {
+            feeType = "";
+        }
+
+        List<BillGroupBean> groupDefaultList = setGroupDefaultList(mGroupDefaultList);
+
+        boolean isDefault = false;
+
+        for (BillGroupBean groupBean : groupDefaultList) {
+            if (groupBean != null) {
+                if (!TextUtils.isEmpty(payMethod) && !TextUtils.isEmpty(feeType)) {
+                    //两种筛选条件
+                    BillGroupBean billGroupBean = null;
+                    if (payMethod.equals(groupBean.getPayMethod()) && feeType.equals(groupBean.getFeeType())) {
+                        //一级菜单是否存在
+                        billGroupBean = groupBean;
+                    }
+                    List<BillBean> beanListTem = new ArrayList<>();
+                    if (groupBean.getChildList() != null && groupBean.getChildList().size() > 0) {
+                        List<BillBean> beanList = groupBean.getChildList();
+                        for (BillBean childBean : beanList) {
+                            if (childBean != null) {
+                                if (payMethod.equals(childBean.getPayMethod()) && feeType.equals(childBean.getFeeType())) {
+                                    //二级菜单是否存在
+                                    if (billGroupBean == null) {
+                                        //如果没有添加一级菜单，需先添加一级菜单
+                                        billGroupBean = getGroupBillBean(childBean);
+                                    }
+                                    beanListTem.add(childBean);
+                                }
+                            }
+                        }
+                    }
+                    if (beanListTem.size() == 0) {
+                        //没有二级菜单， 需要创建一个和一级菜单相同数据的二级菜单
+                        if (billGroupBean != null) {
+                            BillBean bean = getBillBean(billGroupBean);
+                            beanListTem.add(bean);
+                        }
+                    } else {
+                        if (billGroupBean == null && beanListTem.get(0) != null) {
+                            billGroupBean = getGroupBillBean(beanListTem.get(0));
+                        }
+                    }
+                    childBeanList.add(beanListTem);
+                    if (billGroupBean != null) {
+                        int size = 0;
+                        if (Double.compare(billGroupBean.getAmountReality(), billGroupBean.getAmountShould()) != 0) {
+                            size++;
+                        }
+                        if (beanListTem.size() > 0) {
+                            for (BillBean childBean : beanListTem) {
+                                if (Double.compare(childBean.getAmountReality(), childBean.getAmountShould()) != 0) {
+                                    size++;
+                                }
+                            }
+                            billGroupBean.setChildList(beanListTem);
+                        }
+                        billGroupBean.setSize(size);
+                        groupBeanList.add(billGroupBean);
+                    }
+                    isDefault = false;
+                } else if (!TextUtils.isEmpty(payMethod) && TextUtils.isEmpty(feeType)) {
+                    //筛选支付方式
+                    BillGroupBean billGroupBean = null;
+                    if (payMethod.equals(groupBean.getPayMethod())) {
+                        //一级菜单是否存在
+                        billGroupBean = groupBean;
+                    }
+                    List<BillBean> beanListTem = new ArrayList<>();
+                    if (groupBean.getChildList() != null && groupBean.getChildList().size() > 0) {
+                        List<BillBean> beanList = groupBean.getChildList();
+                        for (BillBean childBean : beanList) {
+                            if (childBean != null) {
+                                if (payMethod.equals(childBean.getPayMethod())) {
+                                    //二级菜单是否存在
+                                    if (billGroupBean == null) {
+                                        //如果没有添加一级菜单，需先添加一级菜单
+                                        billGroupBean = getGroupBillBean(childBean);
+                                    }
+                                    beanListTem.add(childBean);
+                                }
+                            }
+                        }
+                    }
+                    if (beanListTem.size() == 0) {
+                        //没有二级菜单， 需要创建一个和一级菜单相同数据的二级菜单
+                        if (billGroupBean != null) {
+                            BillBean bean = getBillBean(billGroupBean);
+                            beanListTem.add(bean);
+                        }
+                    } else {
+                        if (billGroupBean == null && beanListTem.get(0) != null) {
+                            billGroupBean = getGroupBillBean(beanListTem.get(0));
+                        }
+                    }
+                    childBeanList.add(beanListTem);
+                    if (billGroupBean != null) {
+                        int size = 0;
+                        if (Double.compare(billGroupBean.getAmountReality(), billGroupBean.getAmountShould()) != 0) {
+                            size++;
+                        }
+                        if (beanListTem.size() > 0) {
+                            for (BillBean childBean : beanListTem) {
+                                if (Double.compare(childBean.getAmountReality(), childBean.getAmountShould()) != 0) {
+                                    size++;
+                                }
+                            }
+                            billGroupBean.setChildList(beanListTem);
+                        }
+                        billGroupBean.setSize(size);
+                        groupBeanList.add(billGroupBean);
+                    }
+                    isDefault = false;
+                } else if (TextUtils.isEmpty(payMethod) && !TextUtils.isEmpty(feeType)) {
+                    //筛选费用类型
+                    BillGroupBean billGroupBean = null;
+                    if (feeType.equals(groupBean.getFeeType())) {
+                        //一级菜单是否存在
+                        billGroupBean = groupBean;
+                    }
+                    List<BillBean> beanListTem = new ArrayList<>();
+                    if (groupBean.getChildList() != null && groupBean.getChildList().size() > 0) {
+                        List<BillBean> beanList = groupBean.getChildList();
+                        for (BillBean childBean : beanList) {
+                            if (childBean != null) {
+                                if (feeType.equals(childBean.getFeeType())) {
+                                    //二级菜单是否存在
+                                    if (billGroupBean == null) {
+                                        //如果没有添加一级菜单，需先添加一级菜单
+                                        billGroupBean = getGroupBillBean(childBean);
+                                    }
+                                    beanListTem.add(childBean);
+                                }
+                            }
+                        }
+                    }
+                    if (beanListTem.size() == 0) {
+                        //没有二级菜单， 需要创建一个和一级菜单相同数据的二级菜单
+                        if (billGroupBean != null) {
+                            BillBean bean = getBillBean(billGroupBean);
+                            beanListTem.add(bean);
+                        }
+                    } else {
+                        if (billGroupBean == null && beanListTem.get(0) != null) {
+                            billGroupBean = getGroupBillBean(beanListTem.get(0));
+                        }
+                    }
+                    childBeanList.add(beanListTem);
+                    if (billGroupBean != null) {
+                        int size = 0;
+                        if (Double.compare(billGroupBean.getAmountReality(), billGroupBean.getAmountShould()) != 0) {
+                            size++;
+                        }
+                        if (beanListTem.size() > 0) {
+                            for (BillBean childBean : beanListTem) {
+                                if (Double.compare(childBean.getAmountReality(), childBean.getAmountShould()) != 0) {
+                                    size++;
+                                }
+                            }
+                            billGroupBean.setChildList(beanListTem);
+                        }
+                        billGroupBean.setSize(size);
+                        groupBeanList.add(billGroupBean);
+                    }
+                    isDefault = false;
+                } else {
+                    //无筛选条件，默认
+                    isDefault = true;
+
+                }
+            }
+        }
+        if(isDefault) {
+            if (mGroupDefaultList.size() > 0 && mChildDefaultList.size() > 0) {
+                setNewData(mGroupDefaultList, mChildDefaultList);
+            }
+        }else {
+            if (groupBeanList.size() > 0 && childBeanList.size() > 0) {
+                setNewData(groupBeanList, childBeanList);
+            }
+        }
+        if (mGroupList != null && mGroupList.size() > 0 && mChildList != null && mChildList.size() > 0) {
+            myAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void setNewData(List<BillGroupBean> groupBeanList, List<List<BillBean>> childBeanList) {
+        if (mGroupList != null) {
+            if (mGroupList.size() > 0) {
+                mGroupList.clear();
+            }
+            if (groupBeanList != null && groupBeanList.size() > 0) {
+                mGroupList.addAll(groupBeanList);
+            }
+        }
+        if (mChildList != null) {
+            if (mChildList.size() > 0) {
+                mChildList.clear();
+            }
+            if (childBeanList != null && childBeanList.size() > 0) {
+                mChildList.addAll(childBeanList);
             }
         }
     }
@@ -362,16 +625,16 @@ public class MainActivity extends AppCompatActivity implements SelectPopup.OnIte
             feeType = "";
         }
         for (BillGroupBean groupBean : mGroupList) {
-            if (groupBean != null && groupBean.getmChildList() != null && groupBean.getmChildList().size() > 0) {
+            if (groupBean != null && groupBean.getChildList() != null && groupBean.getChildList().size() > 0) {
                 if (!TextUtils.isEmpty(payMethod) && !TextUtils.isEmpty(feeType)) {
                     if (payMethod.equals(groupBean.getPayMethod()) && feeType.equals(groupBean.getFeeType())) {
                         BillBean bean = getBillBean(groupBean);
                         resultList.add(bean);
-                        if(groupBean.getmChildList().size() == 1) {
+                        if (groupBean.getChildList().size() == 1) {
                             continue;
                         }
                     }
-                    for (BillBean billBean : groupBean.getmChildList()) {
+                    for (BillBean billBean : groupBean.getChildList()) {
                         if (payMethod.equals(groupBean.getPayMethod()) && feeType.equals(billBean.getFeeType())) {
                             resultList.add(billBean);
                         }
@@ -380,11 +643,11 @@ public class MainActivity extends AppCompatActivity implements SelectPopup.OnIte
                     if (payMethod.equals(groupBean.getPayMethod())) {
                         BillBean bean = getBillBean(groupBean);
                         resultList.add(bean);
-                        if(groupBean.getmChildList().size() == 1) {
+                        if (groupBean.getChildList().size() == 1) {
                             continue;
                         }
                     }
-                    for (BillBean billBean : groupBean.getmChildList()) {
+                    for (BillBean billBean : groupBean.getChildList()) {
                         if (payMethod.equals(billBean.getPayMethod())) {
                             resultList.add(billBean);
                         }
@@ -393,11 +656,11 @@ public class MainActivity extends AppCompatActivity implements SelectPopup.OnIte
                     if (feeType.equals(groupBean.getFeeType())) {
                         BillBean bean = getBillBean(groupBean);
                         resultList.add(bean);
-                        if(groupBean.getmChildList().size() == 1) {
+                        if (groupBean.getChildList().size() == 1) {
                             continue;
                         }
                     }
-                    for (BillBean billBean : groupBean.getmChildList()) {
+                    for (BillBean billBean : groupBean.getChildList()) {
                         if (feeType.equals(billBean.getFeeType())) {
                             resultList.add(billBean);
                         }
@@ -441,6 +704,32 @@ public class MainActivity extends AppCompatActivity implements SelectPopup.OnIte
             bean.setDeliverContract(groupBean.getDeliverContract());
         }
         return bean;
+    }
+
+    private BillGroupBean getGroupBillBean(BillBean childBean) {
+        BillGroupBean groupBean = new BillGroupBean();
+        if (!TextUtils.isEmpty(childBean.getWayBillNo())) {
+            groupBean.setWayBillNo(childBean.getWayBillNo());
+        }
+        if (!TextUtils.isEmpty(childBean.getTaskType())) {
+            groupBean.setTaskType(childBean.getTaskType());
+        }
+        if (!TextUtils.isEmpty(childBean.getFeeType())) {
+            groupBean.setFeeType(childBean.getFeeType());
+        }
+        groupBean.setAmountReality(childBean.getAmountReality());
+        groupBean.setAmountShould(childBean.getAmountShould());
+
+        if (!TextUtils.isEmpty(childBean.getPayMethod())) {
+            groupBean.setPayMethod(childBean.getPayMethod());
+        }
+        if (!TextUtils.isEmpty(childBean.getSenderContract())) {
+            groupBean.setSenderContract(childBean.getSenderContract());
+        }
+        if (!TextUtils.isEmpty(childBean.getDeliverContract())) {
+            groupBean.setDeliverContract(childBean.getDeliverContract());
+        }
+        return groupBean;
     }
 
     private void showView(boolean isDefault) {
