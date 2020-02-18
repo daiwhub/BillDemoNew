@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/dialog_query_payment_results_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Payment result"
+        android:textAllCaps="false"
+        android:textColor="@color/color_black"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:padding="15dp"/>
+
+    <TextView
+        android:id="@+id/dialog_query_payment_results_content_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This waybill has not bean paid.you can choose to continue to wait or change the payment method."
+        android:textSize="14sp"
+        android:textColor="@color/color_black"
+        android:padding="15dp"/>
+
+    <Button
+        android:id="@+id/dialog_query_payment_results_wait_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Continue to wait"
+        android:background="@drawable/shape_item_radio_btn_false"
+        android:textColor="@color/color_b9683f"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"/>
+
+    <Button
+        android:id="@+id/dialog_query_payment_results_cancel_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel the deal"
+        android:background="@drawable/shape_item_radio_btn_false"
+        android:textColor="@color/color_b9683f"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:layout_margin="15dp"/>
+</LinearLayout>

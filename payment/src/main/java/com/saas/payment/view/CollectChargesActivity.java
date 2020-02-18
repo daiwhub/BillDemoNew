@@ -1,6 +1,7 @@
 package com.saas.payment.view;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +41,9 @@ public class CollectChargesActivity extends AppCompatActivity implements Collect
      */
     private boolean isAllSelected = false;
 
+    private String currency = "";
+    private double totalAmount = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,9 +76,35 @@ public class CollectChargesActivity extends AppCompatActivity implements Collect
         mCollectRbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(CollectChargesActivity.this, SelectPaymentActivity.class));
+
+                List<CollectChargesBean> result = getSelectList();
+                if (result != null && result.size() > 0 && Double.compare(totalAmount, 0) == 1 && !TextUtils.isEmpty(currency)) {
+                    Intent intent = new Intent(CollectChargesActivity.this, SelectPaymentActivity.class);
+                    intent.putParcelableArrayListExtra("chargesBeanList", (ArrayList<? extends Parcelable>) result);
+                    intent.putExtra("totalAmount", totalAmount);
+                    intent.putExtra("currency", currency);
+                    startActivity(intent);
+                }
             }
         });
+    }
+
+    /*
+     * @Description : 获取已选中数据
+     * @Params :
+     * @Author : daiw
+     * @Date : 2020-02-18
+     */
+    private List<CollectChargesBean> getSelectList() {
+        List<CollectChargesBean> result = new ArrayList<>();
+        if (mList != null && mList.size() > 0) {
+            for (CollectChargesBean bean : mList) {
+                if (bean.isSelect()) {
+                    result.add(bean);
+                }
+            }
+        }
+        return result;
     }
 
     /*
@@ -84,14 +114,17 @@ public class CollectChargesActivity extends AppCompatActivity implements Collect
      * @Date : 2020-02-17
      */
     private void setCollect() {
-        double totalAmount = 0;
-        String currency = "";
+
+        double totleAmountTem = 0.0;
+
+        boolean isSelect = false;
         boolean isAll = true;
         if (mList != null && mList.size() > 0) {
             for (CollectChargesBean chargesBean : mList) {
                 if (chargesBean != null) {
                     if (chargesBean.isSelect()) {
-                        totalAmount = BigDecimal.valueOf(totalAmount).add(BigDecimal.valueOf(chargesBean.getAmount())).doubleValue();
+                        isSelect = true;
+                        totleAmountTem = BigDecimal.valueOf(totleAmountTem).add(BigDecimal.valueOf(chargesBean.getAmount())).doubleValue();
                         if (TextUtils.isEmpty(currency)) {
                             currency = chargesBean.getCurrency();
                         }
@@ -101,13 +134,20 @@ public class CollectChargesActivity extends AppCompatActivity implements Collect
                 }
             }
         }
+        if (isSelect) {
+            mCollectRbtn.setChecked(true);
+        } else {
+            mCollectRbtn.setChecked(false);
+        }
         if (isAll) {
             mCheckIv.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_checked));
         } else {
             mCheckIv.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_uncheck));
         }
 
-        mTotalAmountTv.setText("Toltal: " + totalAmount + " " + currency);
+        totalAmount = totleAmountTem;
+
+        mTotalAmountTv.setText("Toltal: " + totleAmountTem + " " + currency);
     }
 
     private void initData() {

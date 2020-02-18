@@ -3,11 +3,12 @@
     package="com.saas.payment">
 
     <application>
-        <activity android:name=".view.PaymentActivity"></activity>
+        <activity android:name=".view.PaymentResultSuccessActivity"></activity>
         <!-- 选择支付方式 -->
         <activity android:name=".view.PaymentMethodActivity" /> <!-- 待支付列表 -->
         <activity android:name=".view.CollectChargesActivity" /> <!-- 选择支付方式 -->
-        <activity android:name=".view.SelectPaymentActivity" />
+        <activity android:name=".view.SelectPaymentActivity" /> <!-- 等待付款结果 -->
+        <activity android:name=".view.PaymentActivity" />
     </application>
 
 </manifest>
