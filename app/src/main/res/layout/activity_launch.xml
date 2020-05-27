@@ -27,4 +27,25 @@
         android:layout_height="wrap_content"
         android:text="Start Collect Charges Page"
         android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/start_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Collect Charges Page"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/start_image_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start ImageView Page"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/start_card_view_list_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start CardView List Page"
+        android:textAllCaps="false" />
 </LinearLayout>

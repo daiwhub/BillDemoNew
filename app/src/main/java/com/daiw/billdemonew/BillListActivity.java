@@ -15,6 +15,7 @@ import com.daiw.billdemonew.bean.BillBean;
 import com.daiw.billdemonew.bean.BillGroupBean;
 import com.daiw.billdemonew.bean.GridItemBean;
 import com.daiw.billdemonew.utils.CopyBeanUtil;
+import com.daiw.billdemonew.weight.ExtendTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class BillListActivity extends AppCompatActivity implements SelectPopup.O
     private List<List<BillBean>> mChildDefaultList = new ArrayList<>();
     private List<List<BillBean>> mChildList;
 
-    private TextView mSlectPaymethodTv;
+    private ExtendTextView mSelectPaymentTv;
     private TextView mSelectUncheckTv;
     private TextView mSelectFeeTypeTv;
 
@@ -57,9 +58,12 @@ public class BillListActivity extends AppCompatActivity implements SelectPopup.O
         mGroupDefaultList = setGroupDefaultList(mGroupList);
         mChildDefaultList = setChildDefaultList(mChildList);
 
-        mSlectPaymethodTv = findViewById(R.id.payment_method_tv);
+        mSelectPaymentTv = findViewById(R.id.payment_method_tv);
         mSelectUncheckTv = findViewById(R.id.uncheck_tv);
         mSelectFeeTypeTv = findViewById(R.id.fee_type_tv);
+
+        mSelectPaymentTv.setTextSize(12);
+        mSelectPaymentTv.setDrawableRight(R.mipmap.icon_up);
 
         //初始化时的两级列表
         mListView = findViewById(R.id.expandable_list);
@@ -119,10 +123,20 @@ public class BillListActivity extends AppCompatActivity implements SelectPopup.O
 
     private void showPopup(View view, List<GridItemBean> itemBeanList, String title) {
         if (mPopup == null) {
-            mPopup = new SelectPopup(this, view, title, itemBeanList, this);
+            mPopup = new SelectPopup(this, view, title, itemBeanList, this, new SelectPopup.OnDismissCallback() {
+                @Override
+                public void onDismiss() {
+                    mSelectPaymentTv.setDrawableRotate(false);
+                }
+            });
         } else {
             mPopup = null;
-            mPopup = new SelectPopup(this, view, title, itemBeanList, this);
+            mPopup = new SelectPopup(this, view, title, itemBeanList, this, new SelectPopup.OnDismissCallback() {
+                @Override
+                public void onDismiss() {
+                    mSelectPaymentTv.setDrawableRotate(false);
+                }
+            });
         }
     }
 
@@ -133,7 +147,7 @@ public class BillListActivity extends AppCompatActivity implements SelectPopup.O
     }
 
     private void setListener() {
-        mSlectPaymethodTv.setOnClickListener(new View.OnClickListener() {
+        mSelectPaymentTv.setOnClickListener(new ExtendTextView.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //支付方式筛选
@@ -353,9 +367,9 @@ public class BillListActivity extends AppCompatActivity implements SelectPopup.O
                 }
             }
             if (0 == position) {
-                mSlectPaymethodTv.setText("All Payment method");
+                mSelectPaymentTv.setText("All Payment method");
             } else {
-                mSlectPaymethodTv.setText(mPayMethodList.get(position).getText());
+                mSelectPaymentTv.setText(mPayMethodList.get(position).getText());
             }
 //            if (mPayMethodIndex == 0 && mFeeTypeIndex == 0) {
 //                showView(true);

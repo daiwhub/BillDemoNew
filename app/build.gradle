@@ -30,4 +30,10 @@ dependencies {
 //
     implementation 'com.daimajia.swipelayout:library:1.2.0'
     implementation project(path: ':payment')
+    implementation files('libs/commons-codec-1.14.jar')
+
+//    implementation 'com.lxj:xpopup:1.8.10'
+//    implementation 'org.kie:kie-ci:7.26.0.Final'
+
+    implementation 'com.android.support:cardview-v7:27.1.1'
 }

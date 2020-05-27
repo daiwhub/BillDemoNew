@@ -2,9 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/color_white"
-    android:paddingBottom="15dp">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/head_hint_tv"
@@ -20,7 +18,7 @@
     <GridView
         android:id="@+id/gridview"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:horizontalSpacing="10dp"
         android:numColumns="2"
         android:verticalSpacing="0dp"
@@ -42,4 +40,12 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/gridview" />
 
+    <!--遮罩，必须有！-->
+    <LinearLayout
+        android:id="@+id/dissmiss"
+        android:layout_width="match_parent"
+        android:layout_height="1200dp"
+        android:background="#50000000"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/cancel_btn"/>
 </android.support.constraint.ConstraintLayout>
